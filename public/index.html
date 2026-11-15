@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local CI</title>
+  <link rel="icon" id="favicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23888'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo" aria-hidden="true"></span>
+        <span>Local CI</span>
+        <span class="conn" id="conn" title="Connecting…"></span>
+      </div>
+      <a class="btn primary block" href="/new" id="newRunBtn">+ New run</a>
+      <div class="side-label">Runs</div>
+      <nav class="runs" id="runs"></nav>
+    </aside>
+    <main class="main" id="main"></main>
+  </div>
+
+  <dialog id="fsDialog" class="dialog">
+    <form method="dialog" class="dialog-inner">
+      <header class="dialog-head">
+        <strong>Choose a folder</strong>
+        <button class="icon-btn" value="cancel" aria-label="Close">✕</button>
+      </header>
+      <div class="fs-path mono" id="fsPath"></div>
+      <div class="fs-list" id="fsList"></div>
+      <footer class="dialog-foot">
+        <span class="muted small" id="fsHint"></span>
+        <button class="btn" value="cancel">Cancel</button>
+        <button class="btn primary" id="fsUse" value="use">Use this folder</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

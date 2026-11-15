@@ -1,0 +1,18 @@
+{
+  "name": "local-ci",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local parallel CI with a live dashboard — run manually or from a git pre-push hook",
+  "type": "module",
+  "bin": {
+    "local-ci": "bin/local-ci.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs --open",
+    "serve": "node server.mjs",
+    "check": "node --check server.mjs && node --check bin/local-ci.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
