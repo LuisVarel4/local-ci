@@ -13,6 +13,7 @@ const HELP = `local-ci — local parallel CI with a live dashboard
 Usage:
   local-ci serve [--open]            start the dashboard server in the foreground
   local-ci open                      start the server in the background (if needed) and open the dashboard
+  local-ci stop | status             stop the background server / check whether it is running
   local-ci run [options]             run a folder's commands, wait, exit 0/1 (used by the pre-push hook)
       --repo <dir>                   folder to run in (default: current directory)
       --cmd "<label>=<command>"      ad-hoc command (repeatable); otherwise the folder preset / auto-detected
@@ -161,6 +162,17 @@ async function main() {
       openUrl(BASE_URL);
       log(`dashboard: ${BASE_URL}`);
       return 0;
+    case 'stop':
+      if (!(await healthy())) {
+        log('dashboard is not running');
+        return 0;
+      }
+      await api('/api/shutdown', { method: 'POST', body: {} });
+      log('dashboard stopped');
+      return 0;
+    case 'status':
+      log((await healthy()) ? `running on ${BASE_URL}` : 'not running');
+      return 0;
     case 'run':
       return cmdRun(o);
     case 'install-hook': {
@@ -189,7 +201,8 @@ async function main() {
 }
 
 main().then(
-  (code) => code != null && process.exit(code),
+  // set exitCode instead of process.exit(): exiting while a fetch socket is closing trips a libuv assertion on Windows
+  (code) => code != null && (process.exitCode = code),
   (e) => {
     console.error('[local-ci]', e.message);
     // never block a push because the dashboard itself broke

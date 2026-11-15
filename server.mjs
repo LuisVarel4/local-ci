@@ -126,6 +126,13 @@ async function route(req, res) {
 
   if (p === '/api/health') return json(res, 200, { ok: true, pid: process.pid, port: PORT, platform: process.platform });
 
+  if (p === '/api/shutdown' && req.method === 'POST') {
+    json(res, 200, { ok: true });
+    runs.stopAll();
+    setTimeout(() => process.exit(0), 100);
+    return;
+  }
+
   if (p === '/api/events' && req.method === 'GET') {
     sseOpen(req, res);
     globalClients.add(res);
